@@ -1,0 +1,17 @@
+#demo-container{
+	width: 1000px;
+	height: 1000px;
+	margin: 0 auto;
+}
+
+/*
+	lg-container (the looking glass container) will fill its parent container unless specified otherwise.
+*/
+
+#my-container{
+	position: relative;
+	width:100%;
+	height: 600px;
+	margin: 150px auto;
+	overflow: hidden;
+}
