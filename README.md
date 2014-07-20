@@ -13,12 +13,27 @@ Simple.
 * Support for content within the lookingglass viewport
 * Overall optimization
 
-
 ###_Use
 
 * Create a container that you would like to hold your images, giving it an ID of your choosing.
+```html
+<div id="my-container">
+</div>
+```
 * Create 2 divs inside your container and name them lg-top-image and lg-bottom-image.
-* Using the data attribute 'src', supply urls to each div created in the previous step. These are the actual images to be layered and viewed.
+```html
+<div id="my-container">
+	<div id="lg-top-image"></div> <!-- The image you see on the page -->
+	<div id="lg-bottom-image"></div> <!-- The image you will "reveal" in the lookingglass -->
+</div>
+```
+* Using the data attribute 'src', supply image locations to each div created in the previous step. These are the actual images to be layered and viewed.
+```html
+<div id="my-container">
+	<div id="lg-top-image"  data-src="img/image_above.jpg"></div>
+    <div id="lg-bottom-image" data-src="img/image_below.jpg"></div>
+</div>
+```
 * Call the lookingglass initialization function when your page loads.
 ```javascript
 window.onload = function(){
@@ -35,4 +50,17 @@ $(document).ready(function(){
 
 });
 ```
-* Optionally, you may supply an option object as a second argument to the lookingglass initialization function. Read about customization soon.
+* Optionally, you may supply an object containing lookingglass customization options as a second argument to lookingglass(). Read about customization below.
+
+###_Options
+
+Lookingglass.js comes prepackaged with a few options to allow user customization. These options can be specified and enabled by passing them to lookingglass() via an Option Object.
+```javascript
+lookingGlass("my-container" , {
+	
+	option: value,
+	option: value,
+	// etc...
+
+});
+```
