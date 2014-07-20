@@ -17,7 +17,7 @@ Simple.
 
 ###_Use
 
-* Create a container that you would like to hold your images, giving it an ID of your choosing.
+* Create a container that you would like to hold your images, giving it an ID of your choosing. Your selected images will fill this container making it your "lookingglass area".
 ```html
 <div id="my-container">
 </div>
