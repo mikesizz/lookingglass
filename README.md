@@ -5,7 +5,7 @@ Take one image, stack another image below it.
 Look "through" the first image and view the second image.
 Simple.
 
-* lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions *
+*lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions*
 
 ###_Currently in the Works:
 
