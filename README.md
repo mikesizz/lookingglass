@@ -1,4 +1,5 @@
-# Lookingglass JS <br> ### javascript x-ray image filter
+# Lookingglass JS 
+### javascript x-ray image filter
 
 Take one image, stack another image below it.
 Look "through" the first image and view the second image.
