@@ -1,11 +1,11 @@
 # Lookingglass JS 
-### javascript x-ray image filter
+### J.X.I.F. - Javascript X-Ray Image Filter
 
 Take one image, stack another image below it.
 Look "through" the first image and view the second image.
 Simple.
 
-/* lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions */
+* lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions *
 
 ###_Currently in the Works:
 
@@ -64,3 +64,18 @@ lookingGlass("my-container" , {
 
 });
 ```
+Customization Options Currently Available:
+
+* viewportSize : "small" // or
+				 "medium" // or
+				 "large"
+* viewportShape : "circle" // default
+				  "square"
+				  "horizontal-rectangle"
+				  "vertical-rectangle"
+* viewportOrientation: 'N' // these follow the cardinal directions, with the mouse cursor as the center
+					   'S'
+					   'W'
+					   'E'
+
+
