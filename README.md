@@ -5,12 +5,14 @@ Take one image, stack another image below it.
 Look "through" the first image and view the second image.
 Simple.
 
-*lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions*
+*lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions as they are currently being prototyped. branches will be added for intended features as development continues*
 
 ###_Currently in the Works:
 
 * Support for various background sizes. Currently confined to "100% auto" or "auto 100%" sizing for your selected images.
 * Support for content within the lookingglass viewport
+* Add customization options such as more unique shapes, custom cursors, 'lense effects' and more
+* Class selector support to allow for multiple instantiations of lookingglass
 * Overall optimization
 
 ###_Use
@@ -64,10 +66,12 @@ lookingGlass("my-container" , {
 
 });
 ```
-Customization Options Currently Available:
+Customization Options Currently Available :
 
 * viewportSize : "small" , "medium" , "large" 
 * viewportShape : "circle" , "square" , "horizontal-rectangle" , "vertical-rectangle"
 * viewportOrientation: 'N' , 'S' , 'W' , 'E'
 
+Further Customization :
 
+Of course you can always modify the lookingglass elements by using css, js or other means. By targeting #lg-bottom-image you can put a shadow or gradient inside the lookingglass viewport, provide a border or border image, or really anything else you can think of. Just be careful when modifying size and or background attributes as it may disrupt the lookingglass effect. As always, test everything before you go to production.
