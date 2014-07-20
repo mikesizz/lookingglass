@@ -1,5 +1,5 @@
 # Lookingglass JS 
-## J.X.I.F. - Javascript X-Ray Image Filter
+### J.X.I.F. - Javascript X-Ray Image Filter
 
 Take one image, stack another image below it.
 Look "through" the first image and view the second image.
@@ -66,12 +66,12 @@ lookingGlass("my-container" , {
 
 });
 ```
-<u>Customization Options Currently Available :</u>
+Customization Options Currently Available :
 
 * viewportSize : "small" , "medium" , "large" 
 * viewportShape : "circle" , "square" , "horizontal-rectangle" , "vertical-rectangle"
 * viewportOrientation: 'N' , 'S' , 'W' , 'E'
 
-<u>Further Customization :</u>
+Further Customization :
 
 Of course you can always modify the lookingglass elements by using css, js or other means. By targeting #lg-bottom-image you can put a shadow or gradient inside the lookingglass viewport, provide a border or border image, or really anything else you can think of. Just be careful when modifying size and or background attributes as it may disrupt the lookingglass effect. As always, test everything before you go to production.
