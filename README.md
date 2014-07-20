@@ -19,4 +19,20 @@ Simple.
 * Create a container that you would like to hold your images, giving it an ID of your choosing.
 * Create 2 divs inside your container and name them lg-top-image and lg-bottom-image.
 * Using the data attribute 'src', supply urls to each div created in the previous step. These are the actual images to be layered and viewed.
+* Call the lookingglass initialization function when your page loads.
+```javascript
+window.onload = function(){
+	
+	lookingGlass("my-container");
+
+};
+
+//or if you prefer...
+
+$(document).ready(function(){
+
+    lookingGlass("my-container");
+
+});
+```
 * Optionally, you may supply an option object as a second argument to the lookingglass initialization function. Read about customization soon.
