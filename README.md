@@ -66,16 +66,8 @@ lookingGlass("my-container" , {
 ```
 Customization Options Currently Available:
 
-* viewportSize : "small" // or
-				 "medium" // or
-				 "large"
-* viewportShape : "circle" // default
-				  "square"
-				  "horizontal-rectangle"
-				  "vertical-rectangle"
-* viewportOrientation: 'N' // these follow the cardinal directions, with the mouse cursor as the center
-					   'S'
-					   'W'
-					   'E'
+* viewportSize : "small" , "medium" , "large" 
+* viewportShape : "circle" , "square" , "horizontal-rectangle" , "vertical-rectangle"
+* viewportOrientation: 'N' , 'S' , 'W' , 'E'
 
 
