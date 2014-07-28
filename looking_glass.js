@@ -18,23 +18,18 @@ $.fn.lookingGlass = function (options) {
 
     var centeringValue = getDeterminateLength(this);
 
+
     var shapeModifiers = getShapeMods(settings.viewportShape);
 
-    var modY;
-    var modX;
-    
-    var sizeMod = null;
-
     //viewportsize
-
     var viewportMods = getViewportModifier(settings.viewportSize);
 
     //viewport orientation
 
     var vals = getOrientationValues(settings.viewportOrientation);
 
-    modY = vals[0] * viewportMods.offset;
-    modX = vals[1] * viewportMods.offset;
+    var modY = vals[0] * viewportMods.offset;
+    var modX = vals[1] * viewportMods.offset;
 
     var cursorOffsetX = (centeringValue / shapeModifiers.Y) / modX;
     var cursorOffsetY = (centeringValue / shapeModifiers.X) / modY;
