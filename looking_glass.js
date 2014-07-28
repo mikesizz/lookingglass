@@ -21,10 +21,14 @@ $.fn.lookingGlass = function (options) {
     var shapeMods = [shapeModX, shapeModY, radiusMod];
 
     if (options["viewportShape"] != null) {
-        shapeMods = getShapeMods(options["viewportShape"]); shapeModX = shapeMods[0]; shapeModY = shapeMods[1];
+        shapeMods = getShapeMods(options["viewportShape"]);
+        shapeModX = shapeMods[0];
+        shapeModY = shapeMods[1];
     }
     if (options["viewportSize"] != null) {
-        viewportMods = getViewportModifier(options["viewportSize"]); offsetMod = viewportMods[0]; sizeMod = viewportMods[1];
+        viewportMods = getViewportModifier(options["viewportSize"]);
+        offsetMod = viewportMods[0];
+        sizeMod = viewportMods[1];
     }
     if (options['viewportOrientation'] != null) {
 
