@@ -3,15 +3,13 @@ $.fn.lookingGlass = function (options) {
 
     if (options == null) { var options = {}; }
 
-    var div = this;
-
-    var x = div.offsetLeft;
-    var y = div.offsetTop;
+    var x = this.offset().left;
+    var y = this.offset().top;
     //  cursorOffset is used to set the position of the looking glass
     //  viewport, relative to the mouse cursor. default is center
     var cursorOffsetX;
     var cursorOffsetY;
-    var centeringValue = getDeterminateLength($(div));
+    var centeringValue = getDeterminateLength(this);
     var modY;
     var modX;
     var viewportMods; // [ offset , size ]
@@ -50,13 +48,14 @@ $.fn.lookingGlass = function (options) {
         trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
     });
 
-    //div.addEventListener('touchmove', function (e) {
-    //    e.preventDefault();
-    //    trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
+    //needs testing on touch device.
+    this.bind('touchmove', function (e) { 
+        e.preventDefault();
+        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
 
-    //}, false);
+    }, false);
 
-}// !lookingGlass()
+}
 
 function getOrientationValues(str) {
 
