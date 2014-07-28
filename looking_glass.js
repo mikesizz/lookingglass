@@ -15,61 +15,42 @@ $.fn.lookingGlass = function (options) {
     var y = this.offset().top;
     //  cursorOffset is used to set the position of the looking glass
     //  viewport, relative to the mouse cursor. default is center
-    
+
     var centeringValue = getDeterminateLength(this);
+
+    var shapeModifiers = getShapeMods(settings.viewportShape);
+
     var modY;
     var modX;
-    var viewportMods; // [ offset , size ]
-    var offsetMod = 1;
+    
     var sizeMod = null;
-    var shapeModX = 1;
-    var shapeModY = 1;
-    var radiusMod = 100;
-    var shapeMods = [shapeModX, shapeModY, radiusMod];
-
-    //viewportshape
-    
-    shapeMods = getShapeMods(settings.viewportShape);
-    shapeModX = shapeMods[0];
-    shapeModY = shapeMods[1];
-    
 
     //viewportsize
-    
-    viewportMods = getViewportModifier(settings.viewportSize);
-    offsetMod = viewportMods[0];
-    sizeMod = viewportMods[1];
-    
+
+    var viewportMods = getViewportModifier(settings.viewportSize);
 
     //viewport orientation
-    if (settings.viewportOrientation != null) {
 
-        var vals = getOrientationValues(settings.viewportOrientation);
+    var vals = getOrientationValues(settings.viewportOrientation);
 
-        modY = vals[0] * offsetMod;
-        modX = vals[1] * offsetMod;
+    modY = vals[0] * viewportMods.offset;
+    modX = vals[1] * viewportMods.offset;
 
-    } else {
-        modY = 4 * offsetMod;
-        modX = 4 * offsetMod;
-    }
+    var cursorOffsetX = (centeringValue / shapeModifiers.Y) / modX;
+    var cursorOffsetY = (centeringValue / shapeModifiers.X) / modY;
 
-    var cursorOffsetX = (centeringValue / shapeModY) / modX;
-    var cursorOffsetY = (centeringValue / shapeModX) / modY;
+    buildTopImage($("#" + settings.topImage));
 
-    var topImage = $("#" + settings.topImage);
     var bottomImage = $("#" + settings.bottomImage);
+    buildBottomImage(viewportMods.size, shapeModifiers, bottomImage);
 
-    buildTopImage(topImage);
-    buildBottomImage(sizeMod, shapeMods, bottomImage);
 
-    
     this.mousemove(function (e) {
         trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
     });
 
     //needs testing on touch device.
-    this.bind('touchmove', function (e) { 
+    this.bind('touchmove', function (e) {
         e.preventDefault();
         trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
 
@@ -135,13 +116,18 @@ $.fn.lookingGlass = function (options) {
                 mods = [1, 1];
                 break;
 
-
             case 'LARGE':
                 mods = [.5, .5];
                 break;
+
+            default :
+                mods = [4,4];
         }
 
-        return mods;
+        return {
+            offset: mods[0],
+            size: mods[1]
+        };
     }
 
     function getShapeMods(shapeMod) {
@@ -177,12 +163,16 @@ $.fn.lookingGlass = function (options) {
 
         }
 
-        return [modX, modY, modRadius];
+        return {
+            X: modX,
+            Y: modY,
+            radius: modRadius
+        };
     }
 
     function buildBottomImage(sizeMod, shapeMods, ele) {
 
-        
+
         var img = ele.data('src');
 
         setImgStyles(ele, img, false, sizeMod, shapeMods);
@@ -216,10 +206,10 @@ $.fn.lookingGlass = function (options) {
         else {
 
             var divisor = 2;
-            var shapeModY = shapeMods[1];
-            var shapeModX = shapeMods[0];
 
-            if (sizeMod != null) { divisor = divisor * sizeMod; }
+            if (sizeMod != null) {
+                divisor = divisor * sizeMod;
+            }
 
             var imgDimensionVal = getDeterminateLength(container.parent()) / divisor;
             container.css({
@@ -227,10 +217,10 @@ $.fn.lookingGlass = function (options) {
                 'position': 'absolute',
                 'left': 0,
                 'top': 0,
-                'width': imgDimensionVal / shapeModY,
-                'height': imgDimensionVal / shapeModX,
+                'width': imgDimensionVal / shapeMods.Y,
+                'height': imgDimensionVal / shapeMods.X,
                 'background': "url('" + image + "')",
-                'border-radius': shapeMods[2] + '%',
+                'border-radius': shapeMods.radius + '%',
                 'background-repeat': 'no-repeat',
                 'background-size': $("#lg-top-image").width() + 'px auto',
                 'overflow': 'hidden'
