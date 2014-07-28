@@ -1,14 +1,21 @@
 
 $.fn.lookingGlass = function (options) {
 
-    if (options == null) { var options = {}; }
+    var settings = $.extend({
+        topImage: "lg-top-image",
+        bottomImage: "lg-bottom-image",
+        viewportShape: "CIRCLE",
+        viewportSize: "MEDIUM",
+        viewportOrientation: "X",
+        topImage: "lg-top-image",
+        bottomImage: "lg-bottom-image"
+    }, options);
 
     var x = this.offset().left;
     var y = this.offset().top;
     //  cursorOffset is used to set the position of the looking glass
     //  viewport, relative to the mouse cursor. default is center
-    var cursorOffsetX;
-    var cursorOffsetY;
+    
     var centeringValue = getDeterminateLength(this);
     var modY;
     var modX;
@@ -20,19 +27,24 @@ $.fn.lookingGlass = function (options) {
     var radiusMod = 100;
     var shapeMods = [shapeModX, shapeModY, radiusMod];
 
-    if (options["viewportShape"] != null) {
-        shapeMods = getShapeMods(options["viewportShape"]);
-        shapeModX = shapeMods[0];
-        shapeModY = shapeMods[1];
-    }
-    if (options["viewportSize"] != null) {
-        viewportMods = getViewportModifier(options["viewportSize"]);
-        offsetMod = viewportMods[0];
-        sizeMod = viewportMods[1];
-    }
-    if (options['viewportOrientation'] != null) {
+    //viewportshape
+    
+    shapeMods = getShapeMods(settings.viewportShape);
+    shapeModX = shapeMods[0];
+    shapeModY = shapeMods[1];
+    
 
-        var vals = getOrientationValues(options['viewportOrientation'].toUpperCase());
+    //viewportsize
+    
+    viewportMods = getViewportModifier(settings.viewportSize);
+    offsetMod = viewportMods[0];
+    sizeMod = viewportMods[1];
+    
+
+    //viewport orientation
+    if (settings.viewportOrientation != null) {
+
+        var vals = getOrientationValues(settings.viewportOrientation);
 
         modY = vals[0] * offsetMod;
         modX = vals[1] * offsetMod;
@@ -42,17 +54,16 @@ $.fn.lookingGlass = function (options) {
         modX = 4 * offsetMod;
     }
 
-    cursorOffsetX = (centeringValue / shapeModY) / modX;
-    cursorOffsetY = (centeringValue / shapeModX) / modY;
+    var cursorOffsetX = (centeringValue / shapeModY) / modX;
+    var cursorOffsetY = (centeringValue / shapeModX) / modY;
 
-    var topImage = $("#lg-top-image");
-    var bottomImage = $("#lg-bottom-image");
+    var topImage = $("#" + settings.topImage);
+    var bottomImage = $("#" + settings.bottomImage);
 
     buildTopImage(topImage);
     buildBottomImage(sizeMod, shapeMods, bottomImage);
 
     
-
     this.mousemove(function (e) {
         trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
     });
@@ -71,7 +82,7 @@ $.fn.lookingGlass = function (options) {
 
         // 2 : top , 100 : bottom , 4 : center(default)
         // 2 : left , 100 : right , 4 : center(default)
-        switch (str) {
+        switch (str.toUpperCase()) {
 
             case 'N':
                 mod[0] = 2;
@@ -94,8 +105,8 @@ $.fn.lookingGlass = function (options) {
                 break;
 
             default:
-                mod[0] = 0;
-                mod[1] = 0;
+                mod[0] = 4;
+                mod[1] = 4;
 
         }
 
@@ -252,6 +263,8 @@ $.fn.lookingGlass = function (options) {
 
         return determinateLength;
     }
+
+    return this;
 }
 
 
