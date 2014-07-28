@@ -45,17 +45,22 @@ $.fn.lookingGlass = function (options) {
     cursorOffsetX = (centeringValue / shapeModY) / modX;
     cursorOffsetY = (centeringValue / shapeModX) / modY;
 
-    buildTopImage();
-    buildBottomImage(sizeMod, shapeMods);
+    var topImage = $("#lg-top-image");
+    var bottomImage = $("#lg-bottom-image");
+
+    buildTopImage(topImage);
+    buildBottomImage(sizeMod, shapeMods, bottomImage);
+
+    
 
     this.mousemove(function (e) {
-        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
+        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
     });
 
     //needs testing on touch device.
     this.bind('touchmove', function (e) { 
         e.preventDefault();
-        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
+        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
 
     }, false);
 
@@ -97,8 +102,8 @@ $.fn.lookingGlass = function (options) {
         return mod;
     };
 
-    function trackMouse(curX, curY, offX, offY, motionEvent) {
-        $("#lg-bottom-image").css({
+    function trackMouse(curX, curY, offX, offY, motionEvent, ele) {
+        ele.css({
             left: motionEvent.pageX - curX - offX,
             top: motionEvent.pageY - curY - offY,
             'background-position': (-motionEvent.pageX + curX + offX) + 'px ' + (-motionEvent.pageY + curY + offY) + 'px'
@@ -130,10 +135,7 @@ $.fn.lookingGlass = function (options) {
 
     function getShapeMods(shapeMod) {
 
-        var modX;
-        var modY;
-        var modRadius;
-        var mods = [];
+        var modX, modY, modRadius;
 
         switch (shapeMod.toUpperCase()) {
 
@@ -164,27 +166,22 @@ $.fn.lookingGlass = function (options) {
 
         }
 
-        mods = [modX, modY, modRadius];
-
-        return mods;
+        return [modX, modY, modRadius];
     }
 
-    function buildBottomImage(sizeMod, shapeMods) {
+    function buildBottomImage(sizeMod, shapeMods, ele) {
 
-        var imgContainer = $("#lg-bottom-image");
-        var img = imgContainer.data('src');
+        
+        var img = ele.data('src');
 
-        setImgStyles(imgContainer, img, false, sizeMod, shapeMods);
+        setImgStyles(ele, img, false, sizeMod, shapeMods);
 
     }
 
-    function buildTopImage() {
+    function buildTopImage(ele) {
 
-        var imgContainer = $("#lg-top-image");
-        var img = imgContainer.data('src');
-
-        setImgStyles(imgContainer, img, true);
-
+        var img = ele.data('src');
+        setImgStyles(ele, img, true);
     }
 
     function setImgStyles(container, image, isTop, sizeMod, shapeMods) {
