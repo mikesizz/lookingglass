@@ -26,13 +26,13 @@ $.fn.lookingGlass = function (options) {
 
     //viewport orientation
 
-    var vals = getOrientationValues(settings.viewportOrientation);
+    var orientationValues = getOrientationValues(settings.viewportOrientation);
 
-    var modY = vals[0] * viewportMods.offset;
-    var modX = vals[1] * viewportMods.offset;
+    var modY = orientationValues[0] * viewportMods.offset;
+    var modX = orientationValues[1] * viewportMods.offset;
 
-    var cursorOffsetX = (centeringValue / shapeModifiers.Y) / modX;
-    var cursorOffsetY = (centeringValue / shapeModifiers.X) / modY;
+    var cursorOffset = getCursorOffset(centeringValue, shapeModifiers.X, shapeModifiers.Y, modX, modY);
+    
 
     buildTopImage($("#" + settings.topImage));
 
@@ -41,7 +41,7 @@ $.fn.lookingGlass = function (options) {
 
 
     this.mousemove(function (e) {
-        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
+        trackMouse(x, y, cursorOffset.X, cursorOffset.Y, e, bottomImage);
     });
 
     //needs testing on touch device.
@@ -51,6 +51,12 @@ $.fn.lookingGlass = function (options) {
 
     }, false);
 
+    function getCursorOffset(centeringValue, shapeModifiersX, shapeModifiersY, modX, modY) {
+        return {
+            X: (centeringValue / shapeModifiersY) / modX,
+            Y: (centeringValue / shapeModifiersX) / modY
+        }
+    };
 
     function getOrientationValues(str) {
 
