@@ -1,8 +1,9 @@
-function lookingGlass(container, options) {
+
+$.fn.lookingGlass = function (options) {
 
     if (options == null) { var options = {}; }
 
-    var div = document.getElementById(container);
+    var div = this;
 
     var x = div.offsetLeft;
     var y = div.offsetTop;
@@ -49,11 +50,11 @@ function lookingGlass(container, options) {
         trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
     });
 
-    div.addEventListener('touchmove', function (e) {
-        e.preventDefault();
-        trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
+    //div.addEventListener('touchmove', function (e) {
+    //    e.preventDefault();
+    //    trackMouse(x, y, cursorOffsetX, cursorOffsetY, e);
 
-    }, false);
+    //}, false);
 
 }// !lookingGlass()
 
@@ -92,16 +93,13 @@ function getOrientationValues(str) {
     }
 
     return mod;
-}
+};
 
 function trackMouse(curX, curY, offX, offY, motionEvent) {
-
     $("#lg-bottom-image").css({
-
         left: motionEvent.pageX - curX - offX,
         top: motionEvent.pageY - curY - offY,
         'background-position': (-motionEvent.pageX + curX + offX) + 'px ' + (-motionEvent.pageY + curY + offY) + 'px'
-
     });
 
 }
