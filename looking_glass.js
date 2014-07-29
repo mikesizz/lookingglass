@@ -1,261 +1,264 @@
-function lookingGlass( container , options ){
+(function ($) {
+    $.fn.lookingGlass = function (options) {
 
-	if( options == null ){ var options = { }; }
+        var settings = $.extend({
+            topImage: "lg-top-image",
+            bottomImage: "lg-bottom-image",
+            viewportShape: "CIRCLE",
+            viewportSize: "MEDIUM",
+            viewportOrientation: "X",
+            topImage: "lg-top-image",
+            bottomImage: "lg-bottom-image"
+        }, options);
 
-    var div = document.getElementById( container );
+        var x = this.offset().left;
+        var y = this.offset().top;
+        //  cursorOffset is used to set the position of the looking glass
+        //  viewport, relative to the mouse cursor. default is center
 
-    var x = div.offsetLeft;
-    var y = div.offsetTop;
-	//  cursorOffset is used to set the position of the looking glass
-    //  viewport, relative to the mouse cursor. default is center
-    var cursorOffsetX;
-   	var cursorOffsetY;
-	var centeringValue = getDeterminateLength( $(div) );
-	var modY;
-	var modX;
-	var viewportMods; // [ offset , size ]
-	var offsetMod = 1;
-	var sizeMod = null;
-	var shapeModX = 1;
-	var shapeModY = 1;
-	var radiusMod = 100;
-	var shapeMods = [ shapeModX , shapeModY , radiusMod ];
+        var centeringValue = getDeterminateLength(this);
 
-	if( options["viewportShape"] != null ){ shapeMods = getShapeMods( options["viewportShape"] ); shapeModX = shapeMods[0]; shapeModY = shapeMods[1]; }
-	if( options["viewportSize"] != null ){ viewportMods = getViewportModifier( options["viewportSize"] ); offsetMod = viewportMods[0]; sizeMod = viewportMods[1]; }
-	if( options['viewportOrientation'] != null ){
 
-		var vals = getOrientationValues( options['viewportOrientation'].toUpperCase() );
-		
-		modY = vals[0]*offsetMod;
-		modX = vals[1]*offsetMod;
+        var shapeModifiers = getShapeMods(settings.viewportShape);
 
-	}else{
+        //viewportsize
+        var viewportMods = getViewportModifier(settings.viewportSize);
 
-		modY = 4*offsetMod; 
-		modX = 4*offsetMod; 
+        //viewport orientation
 
-	}
+        var orientationValues = getOrientationValues(settings.viewportOrientation);
 
-	cursorOffsetX = ( centeringValue / shapeModY ) / modX;
-	cursorOffsetY = ( centeringValue / shapeModX ) / modY;
+        var modY = orientationValues[0] * viewportMods.offset;
+        var modX = orientationValues[1] * viewportMods.offset;
 
-	buildTopImage();
-    buildBottomImage( sizeMod , shapeMods );
+        var cursorOffset = getCursorOffset(centeringValue, shapeModifiers.X, shapeModifiers.Y, modX, modY);
 
-	$(document).mousemove(function ( e ){
-		
-	    trackMouse( x , y , cursorOffsetX , cursorOffsetY , e );
 
-	});
+        buildTopImage($("#" + settings.topImage));
 
-	div.addEventListener('touchmove', function ( e ) {
+        var bottomImage = $("#" + settings.bottomImage);
+        buildBottomImage(viewportMods.size, shapeModifiers, bottomImage);
 
-		e.preventDefault();
-		trackMouse( x , y , cursorOffsetX , cursorOffsetY , e );
- 	
- 	}, false);
 
-}// !lookingGlass()
+        this.mousemove(function (e) {
+            trackMouse(x, y, cursorOffset.X, cursorOffset.Y, e, bottomImage);
+        });
 
-function getOrientationValues( str ){
+        //needs testing on touch device.
+        this.bind('touchmove', function (e) {
+            e.preventDefault();
+            trackMouse(x, y, cursorOffsetX, cursorOffsetY, e, bottomImage);
 
-	var mod = []; // [0] == x , [1] == y
+        }, false);
 
-	// 2 : top , 100 : bottom , 4 : center(default)
-	// 2 : left , 100 : right , 4 : center(default)
-	switch( str ){
+        function getCursorOffset(centeringValue, shapeModifiersX, shapeModifiersY, modX, modY) {
+            return {
+                X: (centeringValue / shapeModifiersY) / modX,
+                Y: (centeringValue / shapeModifiersX) / modY
+            }
+        };
 
-			case 'N':
-				mod[0] = 2;
-				mod[1] = 4;
-				break;
+        function getOrientationValues(str) {
 
-			case 'S':
-				mod[0] = 100;
-				mod[1] = 4;
-				break;
+            var mod = []; // [0] == x , [1] == y
 
-			case 'W':
-				mod[0] = 4;
-				mod[1] = 2;
-				break;
+            // 2 : top , 100 : bottom , 4 : center(default)
+            // 2 : left , 100 : right , 4 : center(default)
+            switch (str.toUpperCase()) {
 
-			case 'E':
-				mod[0] = 4;
-				mod[1] = 100;
-				break;
+                case 'N':
+                    mod[0] = 2;
+                    mod[1] = 4;
+                    break;
 
-			default:
-				mod[0] = 0;
-				mod[1] = 0;
+                case 'S':
+                    mod[0] = 100;
+                    mod[1] = 4;
+                    break;
 
-		}
+                case 'W':
+                    mod[0] = 4;
+                    mod[1] = 2;
+                    break;
 
-	return mod;
+                case 'E':
+                    mod[0] = 4;
+                    mod[1] = 100;
+                    break;
 
-}
+                default:
+                    mod[0] = 4;
+                    mod[1] = 4;
 
-function trackMouse( curX , curY , offX , offY , motionEvent ){
-	
-	$("#lg-bottom-image").css({ 
+            }
 
-		left: motionEvent.pageX-curX-offX , 
-		top: motionEvent.pageY-curY-offY , 
-		'background-position': ( -motionEvent.pageX + curX + offX ) + 'px ' + ( -motionEvent.pageY + curY + offY ) + 'px'
+            return mod;
+        };
 
-	});
+        function trackMouse(curX, curY, offX, offY, motionEvent, ele) {
+            ele.css({
+                left: motionEvent.pageX - curX - offX,
+                top: motionEvent.pageY - curY - offY,
+                'background-position': (-motionEvent.pageX + curX + offX) + 'px ' + (-motionEvent.pageY + curY + offY) + 'px'
+            });
 
-}
+        }
 
-function getViewportModifier( optionStr ){
+        function getViewportModifier(optionStr) {
 
-	var mods = [];
-	switch( optionStr.toUpperCase() ){
+            var mods = [];
+            switch (optionStr.toUpperCase()) {
 
+                case 'SMALL':
+                    mods = [2, 2];
+                    break;
 
-		case 'SMALL':
-			mods = [ 2 , 2 ];
-			break;
+                case 'MEDIUM':
+                    mods = [1, 1];
+                    break;
 
-		case 'MEDIUM':
-			mods = [ 1 , 1 ];
-			break;
-			
+                case 'LARGE':
+                    mods = [.5, .5];
+                    break;
 
-		case 'LARGE':
-			mods = [ .5 , .5 ];
-			break;
-			
+                default:
+                    mods = [4, 4];
+            }
 
-	}
+            return {
+                offset: mods[0],
+                size: mods[1]
+            };
+        }
 
-	return mods;
-}
+        function getShapeMods(shapeMod) {
 
-function getShapeMods( shapeMod ){
+            var modX, modY, modRadius;
 
-	var modX;
-	var modY;
-	var modRadius;
-	var mods = [];
+            switch (shapeMod.toUpperCase()) {
 
-	switch( shapeMod.toUpperCase() ){
+                case "SQUARE":
+                    modX = 1;
+                    modY = 1;
+                    modRadius = 0;
+                    break;
 
-		case "SQUARE":
-			modX = 1;
-			modY = 1;
-			modRadius = 0;
-			break;		
+                case "VERTICAL-RECTANGLE":
+                    modX = 1;
+                    modY = 2;
+                    modRadius = 0;
+                    break;
 
-		case "VERTICAL-RECTANGLE":
-			modX = 1;
-			modY = 2;
-			modRadius = 0;
-			break;
+                case "HORIZONTAL-RECTANGLE":
+                    modX = 2;
+                    modY = 1;
+                    modRadius = 0;
+                    break;
 
-		case "HORIZONTAL-RECTANGLE":
-			modX = 2;
-			modY = 1;
-			modRadius = 0;
-			break;
+                case "CIRCLE":
 
-		case "CIRCLE":
+                default:
+                    modX = 1;
+                    modY = 1;
+                    modRadius = 100;
 
-		default:
-			modX = 1;
-			modY = 1;
-			modRadius = 100;
+            }
 
-	}
+            return {
+                X: modX,
+                Y: modY,
+                radius: modRadius
+            };
+        }
 
-	mods = [ modX , modY , modRadius ];	
+        function buildBottomImage(sizeMod, shapeMods, ele) {
 
-	return mods;
-}
 
-function buildBottomImage( sizeMod , shapeMods ){
+            var img = ele.data('src');
 
-	var imgContainer = $("#lg-bottom-image");
-	var img = imgContainer.data('src');
+            setImgStyles(ele, img, false, sizeMod, shapeMods);
 
-	setImgStyles( imgContainer , img , false , sizeMod , shapeMods );
+        }
 
-}
+        function buildTopImage(ele) {
 
-function buildTopImage(){
+            var img = ele.data('src');
+            setImgStyles(ele, img, true);
+        }
 
-	var imgContainer = $("#lg-top-image");
-	var img = imgContainer.data('src');
+        function setImgStyles(container, image, isTop, sizeMod, shapeMods) {
 
-	setImgStyles( imgContainer , img , true );
+            if (isTop) {
 
-}
+                container.css({
 
-function setImgStyles( container , image , isTop , sizeMod , shapeMods ){
+                    'position': 'absolute',
+                    'left': 0,
+                    'top': 0,
+                    'width': 100 + '%',
+                    'height': 100 + '%',
+                    'background': "url('" + image + "')",
+                    'background-repeat': 'no-repeat',
+                    'background-size': 100 + '% auto'
 
-	if( isTop ){
+                });
 
-		container.css({
-	
-			'position' : 'absolute' ,
-			'left' :0 ,
-			'top' :0 ,
-			'width' :100+'%' ,
-			'height' :100+'%' ,
-			'background' : "url('"+image+"')" ,
-			'background-repeat' : 'no-repeat' ,
-			'background-size' : 100+'% auto'
-	
-		});
+            }
+            else {
 
-	}else{
+                var divisor = 2;
 
-		var divisor = 2;
-		var shapeModY = shapeMods[1];
-		var shapeModX = shapeMods[0];
+                if (sizeMod != null) {
+                    divisor = divisor * sizeMod;
+                }
 
-		if( sizeMod != null ){  divisor = divisor*sizeMod; }
+                var imgDimensionVal = getDeterminateLength(container.parent()) / divisor;
+                container.css({
 
-		var imgDimensionVal = getDeterminateLength( container.parent() )/ divisor ;
-		container.css({
-	
-			'position' : 'absolute' ,
-			'left' :0 ,
-			'top' :0 ,
-			'width' : imgDimensionVal/shapeModY ,
-			'height' : imgDimensionVal/shapeModX ,
-			'background' : "url('"+image+"')" ,
-			'border-radius' : shapeMods[2]+'%' ,
-			'background-repeat' : 'no-repeat' ,
-			'background-size' : $("#lg-top-image").width() +'px auto',
-			'overflow':'hidden'
-	
-		});
+                    'position': 'absolute',
+                    'left': 0,
+                    'top': 0,
+                    'width': imgDimensionVal / shapeMods.Y,
+                    'height': imgDimensionVal / shapeMods.X,
+                    'background': "url('" + image + "')",
+                    'border-radius': shapeMods.radius + '%',
+                    'background-repeat': 'no-repeat',
+                    'background-size': $("#lg-top-image").width() + 'px auto',
+                    'overflow': 'hidden'
 
-	}
+                });
 
-}
+            }
 
-function getDeterminateLength( container ){
+        }
 
-	var boxWidth = container.width();
-	var boxHeight = container.height();
+        function getDeterminateLength(container) {
 
-	var determinateLength;
+            var boxWidth = container.width();
+            var boxHeight = container.height();
 
-	if( boxWidth != boxHeight ){
+            var determinateLength;
 
-		if( boxWidth < boxHeight ){
-	
-			determinateLength = boxWidth;
-	
-		}else{ determinateLength = boxHeight; }
+            if (boxWidth != boxHeight) {
 
-	}else{ 
+                if (boxWidth < boxHeight) {
 
-		determinateLength = boxWidth; 
-	}
+                    determinateLength = boxWidth;
 
-	return determinateLength;
-}
+                } else { determinateLength = boxHeight; }
+
+            } else {
+
+                determinateLength = boxWidth;
+            }
+
+            return determinateLength;
+        }
+
+        return this;
+    }
+
+
+
+
+}(jQuery));
