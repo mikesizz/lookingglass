@@ -17,12 +17,12 @@ Simple.
 
 ###_Use:
 
-* Create a container that you would like to hold your images, giving it an ID of your choosing. Your selected images will fill this container making it your "lookingglass area".
+* Create a container that you would like to hold your images. Your selected images will fill this container making it your "lookingglass area".
 ```html
 <div id="my-container">
 </div>
 ```
-* Create 2 divs inside your container and name them lg-top-image and lg-bottom-image.
+* Create 2 divs inside your container and name them lg-top-image and lg-bottom-image. Alternatively, you can provide your own top and bottom image selectors with lookingglass' customization options, which are detailed in the next section.
 ```html
 <div id="my-container">
 	<div id="lg-top-image"></div> <!-- The image you see on the page -->
@@ -32,7 +32,7 @@ Simple.
 * Using the data attribute 'src', supply image locations to each div created in the previous step. These are the actual images to be layered and viewed.
 ```html
 <div id="my-container">
-	<div id="lg-top-image"  data-src="img/image_above.jpg"></div>
+	<div id="lg-top-image" data-src="img/image_above.jpg"></div>
     <div id="lg-bottom-image" data-src="img/image_below.jpg"></div>
 </div>
 ```
@@ -40,7 +40,7 @@ Simple.
 ```javascript
 window.onload = function(){
 	
-	lookingGlass("my-container");
+	$("#my-container").lookingglass();
 
 };
 
@@ -48,17 +48,17 @@ window.onload = function(){
 
 $(document).ready(function(){
 
-    lookingGlass("my-container");
+    $("#my-container").lookingglass();
 
 });
 ```
-* Optionally, you may supply an object containing lookingglass customization options as a second argument to lookingglass(). Read about customization below.
+* Optionally, you may supply an object containing lookingglass customization options to lookingglass(). Read about customization below.
 
 ###_Options:
 
 Lookingglass.js comes prepackaged with a few options to allow user customization. These options can be specified and enabled by passing them to lookingglass() via an Option Object.
 ```javascript
-lookingGlass("my-container" , {
+$("#my-container").lookingGlass({
 	
 	option: value,
 	option: value,
@@ -68,10 +68,12 @@ lookingGlass("my-container" , {
 ```
 Customization Options Currently Available :
 
+* topImage: 'provide an ID of your choosing'
+* bottomImage: 'provide an ID of your choosing'
 * viewportSize : "small" , "medium" , "large" 
 * viewportShape : "circle" , "square" , "horizontal-rectangle" , "vertical-rectangle"
 * viewportOrientation: 'N' , 'S' , 'W' , 'E'
 
 Further Customization :
 
-Of course you can always modify the lookingglass elements by using css, js or other means. By targeting #lg-bottom-image you can put a shadow or gradient inside the lookingglass viewport, provide a border or border image, or really anything else you can think of. Just be careful when modifying size and or background attributes as it may disrupt the lookingglass effect. As always, test everything before you go to production.
+Of course you can always modify the lookingglass elements by using css, js or other means. By targeting #lg-bottom-image (or your provided bottom image container) you can put a shadow or gradient inside the lookingglass viewport, provide a border or border image, or really anything else you can think of. Just be careful when modifying size and or background attributes as it may disrupt the lookingglass effect. As always, test everything before you go to production.
