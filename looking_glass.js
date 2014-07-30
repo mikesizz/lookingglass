@@ -1,6 +1,28 @@
 (function ($) {
     $.fn.lookingGlass = function (options) {
 
+        $(window).resize(function(){
+
+
+        orientationValues = getOrientationValues(settings.viewportOrientation);
+
+        modY = orientationValues[0] * viewportMods.offset;
+        modX = orientationValues[1] * viewportMods.offset;
+
+        cursorOffset = getCursorOffset(centeringValue, shapeModifiers.X, shapeModifiers.Y, modX, modY);
+
+
+            
+
+            bottomImage = $("#" + settings.bottomImage);
+        buildBottomImage(viewportMods.size, shapeModifiers, bottomImage);
+
+        resizeCoverBox();
+            trackMouse(x, y, cursorOffset.X, cursorOffset.Y, e, bottomImage);
+            
+
+        });
+
         var settings = $.extend({
             topImage: "lg-top-image",
             bottomImage: "lg-bottom-image",
