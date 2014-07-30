@@ -244,7 +244,7 @@
                     'height': 100 + '%',
                     'background': "url('" + image + "')",
                     'background-repeat': 'no-repeat',
-                    'background-size': 100 + '% auto'
+                    'background-size': 'auto ' + 100 + '%'
 
                 });
 
@@ -268,7 +268,7 @@
                     'background': "url('" + image + "')",
                     'border-radius': shapeMods.radius + '%',
                     'background-repeat': 'no-repeat',
-                    'background-size': $("#lg-top-image").width() + 'px auto',
+                    'background-size': 'auto ' + $("#lg-top-image").height() + 'px',
                     'overflow': 'hidden'
 
                 });
