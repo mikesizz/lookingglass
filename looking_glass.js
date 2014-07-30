@@ -51,6 +51,8 @@
 
         }, false);
 
+        resizeCoverBox();
+
         function getCursorOffset(centeringValue, shapeModifiersX, shapeModifiersY, modX, modY) {
             return {
                 X: (centeringValue / shapeModifiersY) / modX,
@@ -100,6 +102,38 @@
                 left: motionEvent.pageX - curX - offX,
                 top: motionEvent.pageY - curY - offY,
                 'background-position': (-motionEvent.pageX + curX + offX) + 'px ' + (-motionEvent.pageY + curY + offY) + 'px'
+            });
+
+            $("#lg-bottom-image").css({ 
+
+                left: motionEvent.pageX-curX-offX , 
+                top: motionEvent.pageY-curY-offY , 
+                'background-position': ( -motionEvent.pageX + curX + offX ) + 'px ' + ( -motionEvent.pageY + curY + offY ) + 'px'
+
+            });
+
+            //gotta deal with center
+
+            $("#img-box").css({ 
+
+                left: motionEvent.pageX-curX-offX, 
+                top: motionEvent.pageY-curY-offY, 
+                'background-position':  ( -motionEvent.pageX + curX + offX ) + 'px ' + ( -motionEvent.pageY + curY + offY ) + 'px'
+
+            });
+
+            $("#relative-box").css({ 
+                
+                left: motionEvent.pageX-curX-offX , 
+                top: motionEvent.pageY-curY-offY , 
+            
+            });
+
+            $("#img-box *").css({ 
+                'position':'absolute',
+                'display':'block',
+                'margin-left': -motionEvent.pageX+curX+offX , 
+                'margin-top': -motionEvent.pageY+curY+offY 
             });
 
         }
@@ -170,6 +204,17 @@
                 radius: modRadius
             };
         }
+
+        function resizeCoverBox(  ){
+
+            var z = $("#lg-top-image").offset();
+
+            $("#img-box, #relative-box").css({
+                'width':$("#lg-top-image").width()+"px", 
+                'height': $("#lg-top-image").height()+"px",'top': z.top
+            });
+
+        };
 
         function buildBottomImage(sizeMod, shapeMods, ele) {
 
