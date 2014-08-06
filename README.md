@@ -1,79 +1,39 @@
-# Lookingglass JS 
-### J.X.I.F. - Javascript X-Ray Image Filter
+# Lookingglass JS - Dev Branch
+### les make some shi-
 
-Take one image, stack another image below it.
-Look "through" the first image and view the second image.
-Simple.
+this is the dev branch for lookingglass.js. the issues listed below are the current goals and plans that i have in mind, but feel free to use [this issue](https://github.com/mikesizz/lookingglass/issues/5) to leave any new ideas, questions or criticisms.
 
-*lookingglass.js is a project that is still in the works. though it is fully functional in its current state, it is missing quite a few intended features/additions as they are currently being prototyped. branches will be added for intended features as development continues*
+###_On the Table
 
-###_Currently in the Works:
+##The new Content Container Model
 
-* Support for various background sizes. Currently confined to "100% auto" or "auto 100%" sizing for your selected images.
-* Support for content within the lookingglass viewport
-* Add customization options such as more unique shapes, custom cursors, 'lense effects' and more
-* Class selector support to allow for multiple instantiations of lookingglass
-* Overall optimization
+the biggest goals for lookingglass atm is to let the developer have the ability to use the other background-size values such as cover and contain, as well as the ability to have content inside the lookingglass "area" itself.
 
-###_Use:
+both of these goals can be achieved by using the new content model, which provides two new siblings to the top and bottom image elements.
 
-* Create a container that you would like to hold your images. Your selected images will fill this container making it your "lookingglass area".
 ```html
 <div id="my-container">
+
+    <div id="lg-top-image"  data-src="img/top.jpg"></div>
+    <div id="lg-bottom-image" data-src="img/bottom.jpg">
+
+    	<div id="img-box">
+        	<div id="relative-box">
+            </div>
+        </div>
+
+    </div><!-- !lg-bottom-image -->
 </div>
 ```
-* Create 2 divs inside your container and name them lg-top-image and lg-bottom-image. Alternatively, you can provide your own top and bottom image selectors with lookingglass' customization options, which are detailed in the next section.
-```html
-<div id="my-container">
-	<div id="lg-top-image"></div> <!-- The image you see on the page -->
-	<div id="lg-bottom-image"></div> <!-- The image you will "reveal" in the lookingglass -->
-</div>
-```
-* Using the data attribute 'src', supply image locations to each div created in the previous step. These are the actual images to be layered and viewed.
-```html
-<div id="my-container">
-	<div id="lg-top-image" data-src="img/image_above.jpg"></div>
-    <div id="lg-bottom-image" data-src="img/image_below.jpg"></div>
-</div>
-```
-* Call the lookingglass initialization function when your page loads.
-```javascript
-window.onload = function(){
-	
-	$("#my-container").lookingglass();
 
-};
+the "#img-box" element will provide the container for images that are using the cover and contain background-size values. at the same time it will provide a relatively positioned parent element for any content elements that the developer would like to be revealed through the lookingglass viewport. 
 
-//or if you prefer...
+at the moment these interior elements can be placed using the top, bottom, left, and right attributes, as they must be absolutely positioned to behave correctly. also, they will be oriented to the images height and width, something that should be considered with all measurements and sizing.
 
-$(document).ready(function(){
+##_Problems
 
-    $("#my-container").lookingglass();
+for some reason the background image being revealed visually "wiggles" if the images fills the browser window in any way and the user moves the mouse cursor to a point where any edge of the lookingglass viewport bleeds off of the browser viewports boundaries. 
 
-});
-```
-* Optionally, you may supply an object containing lookingglass customization options to lookingglass(). Read about customization below.
+this issue only happens with chrome browser and has been one of the main reasons i have yet to release these updates. an issue has been opened for this bug at [this page](https://github.com/mikesizz/lookingglass/issues/4). feel free to give it a go and see if you cant get it to stop wiggling.
 
-###_Options:
-
-Lookingglass.js comes prepackaged with a few options to allow user customization. These options can be specified and enabled by passing them to lookingglass() via an Option Object.
-```javascript
-$("#my-container").lookingGlass({
-	
-	option: value,
-	option: value,
-	// etc...
-
-});
-```
-Customization Options Currently Available :
-
-* topImage: 'provide an ID of your choosing'
-* bottomImage: 'provide an ID of your choosing'
-* viewportSize : "small" , "medium" , "large" 
-* viewportShape : "circle" , "square" , "horizontal-rectangle" , "vertical-rectangle"
-* viewportOrientation: 'N' , 'S' , 'W' , 'E'
-
-Further Customization :
-
-Of course you can always modify the lookingglass elements by using css, js or other means. By targeting #lg-bottom-image (or your provided bottom image container) you can put a shadow or gradient inside the lookingglass viewport, provide a border or border image, or really anything else you can think of. Just be careful when modifying size and or background attributes as it may disrupt the lookingglass effect. As always, test everything before you go to production.
+###More updates to come soon. In the meantime check out the issues and feel free to jump in!
