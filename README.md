@@ -9,7 +9,7 @@ this is the dev branch for lookingglass.js. the issues listed below are the curr
 
 the biggest goals for lookingglass atm is to let the developer have the ability to use the other background-size values such as cover and contain, as well as the ability to have content inside the lookingglass "area" itself.
 
-both of these goals can be achieved by using the new content model, which provides two new siblings to the top and bottom image elements.
+both of these goals can be achieved by using the new content model, which provides a new siblings to the top and bottom image elements, along with its important child element.
 
 ```html
 <div id="my-container">
